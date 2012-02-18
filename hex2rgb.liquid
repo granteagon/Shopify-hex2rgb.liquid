@@ -1,0 +1,22 @@
+{% assign hex2rgb_rgb = hex2rgb_hex | remove: '#' | downcase | split: '' %}
+{% assign hex2rgb_str = '' %}
+{% assign hex2rgb_chars = 'a,b,c,d,e,f' | split: ',' %}
+{% assign hex2rgb_remainders = '10,11,12,13,14,15' | split: ',' %}
+{% for hex2rgb_i in (0..5) %}
+    {% assign hex2rgb_is_char = 0 %}
+    {% for hex2rgb_c in (0..5) %}
+        {% unless hex2rgb_is_char == 1 %}
+            {% if hex2rgb_rgb[hex2rgb_i] == hex2rgb_chars[hex2rgb_c] %}
+                {% assign hex2rgb_is_char = 1 %}
+                {% capture hex2rgb_str %}{{ hex2rgb_str }}{{ hex2rgb_remainders[hex2rgb_c] }}|{% endcapture %}
+            {% endif %}
+        {% endunless %}
+    {% endfor %}    
+    {% if hex2rgb_is_char == 0 %}
+        {% capture hex2rgb_str %}{{ hex2rgb_str }}{{ hex2rgb_rgb[hex2rgb_i] }}|{% endcapture %}
+    {% endif %}
+{% endfor %}
+{% assign hex2rgb_rgb = hex2rgb_str | split: "|" %}
+{% assign hex2rgb_r = hex2rgb_rgb[0] | times: 16 | plus: hex2rgb_rgb[1] %}
+{% assign hex2rgb_g = hex2rgb_rgb[2] | times: 16 | plus: hex2rgb_rgb[3] %}
+{% assign hex2rgb_b = hex2rgb_rgb[4] | times: 16 | plus: hex2rgb_rgb[5] %}
